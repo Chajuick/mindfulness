@@ -218,6 +218,12 @@ body {
   color: var(--accent);
 }
 
+/* 강조. 본문의 결을 깨지 않을 만큼만 굵게 한다. */
+.emph {
+  font-style: normal;
+  font-weight: 600;
+}
+
 /* 세로쓰기 책등 */
 .spine-text {
   writing-mode: vertical-rl;

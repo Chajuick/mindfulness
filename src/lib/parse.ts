@@ -5,6 +5,15 @@ const MAX_BLOCK_CHARS = 300;
 
 const WEEKDAYS = ["일", "월", "화", "수", "목", "금", "토"] as const;
 
+function starCount(text: string): number {
+  return text.match(/\*\*/g)?.length ?? 0;
+}
+
+/** 글자수·발췌에서는 강조 표기를 빼고 센다. */
+function strip(text: string): string {
+  return text.replace(/\*\*/g, "");
+}
+
 function splitSentences(text: string): string[] {
   return text
     .split(/(?<=[.!?…”』」])\s+/)
@@ -29,7 +38,18 @@ function chunk(block: Block): Block[] {
   }
   if (buf) parts.push(buf);
 
-  return parts.map((text, i) => ({ ...block, text, cont: i > 0 }));
+  // ** 강조가 조각 사이에서 끊기면 별표가 그대로 드러난다. 짝이 맞을 때까지 붙인다.
+  const joined: string[] = [];
+  for (const part of parts) {
+    const last = joined.at(-1);
+    if (last !== undefined && starCount(last) % 2 === 1) {
+      joined[joined.length - 1] = `${last} ${part}`;
+    } else {
+      joined.push(part);
+    }
+  }
+
+  return joined.map((text, i) => ({ ...block, text, cont: i > 0 }));
 }
 
 /** 본문 텍스트를 블록 배열로. 빈 줄이 블록 경계, 홑 줄바꿈은 그대로 살린다. */
