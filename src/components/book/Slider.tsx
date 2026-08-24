@@ -2,7 +2,7 @@
 
 import { AnimatePresence, motion, type PanInfo } from "framer-motion";
 import type { Book, Leaf } from "@/lib/types";
-import { GAP_MOBILE } from "@/lib/layout";
+import type { Metrics } from "@/lib/layout";
 import { LeafFace } from "./LeafFace";
 
 const SLIDE = {
@@ -29,6 +29,7 @@ export function Slider({
   onNav,
   width,
   height,
+  type,
 }: {
   leaves: Leaf[];
   book: Book;
@@ -37,6 +38,7 @@ export function Slider({
   onNav: (d: 1 | -1) => void;
   width: number;
   height: number;
+  type: Metrics;
 }) {
   function onDragEnd(_: unknown, info: PanInfo) {
     const throw_ = info.offset.x + info.velocity.x * 0.12;
@@ -46,7 +48,7 @@ export function Slider({
 
   return (
     <div
-      className="relative overflow-hidden rounded-[3px] shadow-[0_2px_6px_rgb(var(--shadow-warm)/0.14),0_24px_46px_-22px_rgb(var(--shadow-warm)/0.4)]"
+      className="book-shadow relative overflow-hidden rounded-[2px]"
       style={{ width, height }}
     >
       <AnimatePresence initial={false} custom={dir}>
@@ -69,7 +71,7 @@ export function Slider({
             book={book}
             variant="single"
             folio={index + 1}
-            gap={GAP_MOBILE}
+            type={type}
           />
         </motion.div>
       </AnimatePresence>

@@ -52,7 +52,23 @@ function chunk(block: Block): Block[] {
   return joined.map((text, i) => ({ ...block, text, cont: i > 0 }));
 }
 
-/** 본문 텍스트를 블록 배열로. 빈 줄이 블록 경계, 홑 줄바꿈은 그대로 살린다. */
+/**
+ * 문단 안의 홑 줄바꿈을 경계로 다시 나눈다.
+ *
+ * 한 문단을 통째로만 옮기면 들어가지 않을 때마다 장 아래가 크게 빈다.
+ * 지은이가 일부러 끊어둔 줄에서 나누면, 나뉜 자리가 눈에 띄지 않으면서
+ * 판면이 아래까지 찬다. 이어지는 조각은 cont 표시를 달아 위 여백을 없앤다.
+ */
+function segments(block: Block): Block[] {
+  return block.text
+    .split("\n")
+    .map((line) => line.trim())
+    .filter(Boolean)
+    .flatMap((text, i) => chunk({ ...block, text, cont: i > 0 }))
+    .map((piece, i) => ({ ...piece, cont: i > 0 }));
+}
+
+/** 본문 텍스트를 블록 배열로. 빈 줄이 문단 경계다. */
 export function parseBlocks(body: string): Block[] {
   return body
     .replace(/\r\n/g, "\n")
@@ -61,15 +77,15 @@ export function parseBlocks(body: string): Block[] {
     .filter(Boolean)
     .flatMap((text) => {
       if (text.startsWith("> ")) {
-        return chunk({ kind: "quote", text: text.replace(/^> ?/gm, "") });
+        return segments({ kind: "quote", text: text.replace(/^> ?/gm, "") });
       }
       const isSpokenQuote =
         (text.startsWith("“") && text.endsWith("”")) ||
         (text.startsWith('"') && text.endsWith('"'));
-      if (isSpokenQuote && !text.includes("\n\n")) {
-        return chunk({ kind: "quote", text });
+      if (isSpokenQuote) {
+        return segments({ kind: "quote", text });
       }
-      return chunk({ kind: "para", text });
+      return segments({ kind: "para", text });
     });
 }
 

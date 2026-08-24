@@ -5,10 +5,14 @@ import { AnimatePresence, motion } from "framer-motion";
 import { countChars, parseBlocks, weekdayOf } from "@/lib/parse";
 import { listDrafts, newDraft, putDraft, removeDraft, type Draft } from "@/lib/drafts";
 import { downloadMarkdown, targetPathOf, toMarkdown } from "@/lib/serialize";
-import { BlockView } from "@/components/book/BlockView";
+import { BlockRow } from "@/components/book/BlockView";
+import { metricsFor } from "@/lib/layout";
 import { longDate } from "@/lib/view";
 
 type SaveState = "idle" | "saving" | "saved";
+
+/** 미리보기도 판면과 같은 그리드를 쓴다 */
+const PAGE = metricsFor(true);
 
 export function Composer({ words }: { words: string[] }) {
   const [drafts, setDrafts] = useState<Draft[]>([]);
@@ -214,11 +218,18 @@ export function Composer({ words }: { words: string[] }) {
                     </span>
                     <span className="h-px flex-1 bg-rule/70" />
                   </div>
-                  <div className="prose-diary mt-7 flex flex-col gap-5">
+                  <div className="prose-diary mt-7 flex flex-col">
                     {blocks.length === 0 ? (
                       <p className="text-ink-3">아직 아무것도 적지 않았습니다.</p>
                     ) : (
-                      blocks.map((block, i) => <BlockView key={i} block={block} />)
+                      blocks.map((block, i) => (
+                        <BlockRow
+                          key={i}
+                          block={block}
+                          first={i === 0}
+                          leading={PAGE.leading}
+                        />
+                      ))
                     )}
                   </div>
                 </div>

@@ -2,7 +2,7 @@
 
 import { motion } from "framer-motion";
 import type { Book, Leaf } from "@/lib/types";
-import { GAP_DESKTOP } from "@/lib/layout";
+import type { Metrics } from "@/lib/layout";
 import { LeafFace } from "./LeafFace";
 
 export type FlipDir = 1 | -1;
@@ -26,6 +26,7 @@ export function Spread({
   onFlipEnd,
   width,
   height,
+  type,
 }: {
   leaves: Leaf[];
   book: Book;
@@ -34,6 +35,7 @@ export function Spread({
   onFlipEnd: () => void;
   width: number;
   height: number;
+  type: Metrics;
 }) {
   const half = Math.floor(width / 2);
 
@@ -49,12 +51,12 @@ export function Spread({
 
   return (
     <div className="book-scene relative" style={{ width, height }}>
-      {/* 뒤에 쌓인 종이: 책의 두께 */}
-      <Stack side="left" height={height} />
-      <Stack side="right" height={height} />
+      {/* 책배: 닫힌 쪽에서 보이는 종이 단면 */}
+      <ForeEdge side="left" height={height} />
+      <ForeEdge side="right" height={height} />
 
       <div
-        className="absolute inset-0 flex overflow-hidden rounded-[2px] shadow-[0_2px_6px_rgb(var(--shadow-warm)/0.14),0_36px_70px_-28px_rgb(var(--shadow-warm)/0.42)]"
+        className="book-shadow absolute inset-0 flex overflow-hidden rounded-[2px]"
         style={{ width: half * 2 }}
       >
         <div style={{ width: half }} className="relative h-full">
@@ -63,7 +65,7 @@ export function Spread({
             book={book}
             variant="left"
             folio={underLeftAt + 1}
-            gap={GAP_DESKTOP}
+            type={type}
           />
         </div>
         <div style={{ width: half }} className="relative h-full">
@@ -72,7 +74,7 @@ export function Spread({
             book={book}
             variant="right"
             folio={underRightAt + 1}
-            gap={GAP_DESKTOP}
+            type={type}
           />
         </div>
       </div>
@@ -80,7 +82,7 @@ export function Spread({
       {/* 책등 접힘선 */}
       <span
         aria-hidden="true"
-        className="pointer-events-none absolute inset-y-0 z-20 w-px bg-rule/50"
+        className="pointer-events-none absolute inset-y-0 z-20 w-px bg-rule/45"
         style={{ left: half }}
       />
 
@@ -99,7 +101,7 @@ export function Spread({
               book={book}
               variant="right"
               folio={frontAt + 1}
-              gap={GAP_DESKTOP}
+              type={type}
             />
             <Shade values={frontShade} origin="left" />
           </div>
@@ -112,7 +114,7 @@ export function Spread({
               book={book}
               variant="left"
               folio={backAt + 1}
-              gap={GAP_DESKTOP}
+              type={type}
             />
             <Shade values={backShade} origin="right" />
           </div>
@@ -129,7 +131,7 @@ function Shade({ values, origin }: { values: number[]; origin: "left" | "right" 
       aria-hidden="true"
       className="pointer-events-none absolute inset-0"
       style={{
-        background: `linear-gradient(to ${origin === "left" ? "right" : "left"}, rgb(var(--shadow-warm) / 0.55), rgb(var(--shadow-warm) / 0.06) 55%, transparent)`,
+        background: `linear-gradient(to ${origin === "left" ? "right" : "left"}, rgb(var(--shadow-warm) / 0.5), rgb(var(--shadow-warm) / 0.05) 55%, transparent)`,
       }}
       initial={{ opacity: values[0] }}
       animate={{ opacity: values[1] }}
@@ -138,21 +140,29 @@ function Shade({ values, origin }: { values: number[]; origin: "left" | "right" 
   );
 }
 
-function Stack({ side, height }: { side: "left" | "right"; height: number }) {
-  const offsets = [3, 6, 9];
+/**
+ * 바깥쪽 모서리에 드러나는 종이 단면. 실제 책에서 보이는 만큼만
+ * 얇게 낸다. 넓게 깔면 종이 더미가 아니라 그림자로 보인다.
+ */
+function ForeEdge({ side, height }: { side: "left" | "right"; height: number }) {
+  const slivers = [
+    { offset: 2, width: 2, inset: 3 },
+    { offset: 4, width: 2, inset: 7 },
+    { offset: 6, width: 1, inset: 11 },
+  ];
   return (
     <>
-      {offsets.map((o, i) => (
+      {slivers.map((s, i) => (
         <span
-          key={o}
+          key={s.offset}
           aria-hidden="true"
-          className="pointer-events-none absolute w-[46%] rounded-[2px] bg-paper-2"
+          className="fore-edge pointer-events-none absolute rounded-[1px]"
           style={{
-            top: o * 0.7,
-            height: height - o * 1.4,
-            [side]: -o,
-            opacity: 0.55 - i * 0.14,
-            boxShadow: "0 1px 2px rgb(var(--shadow-warm) / 0.12)",
+            top: s.inset,
+            height: height - s.inset * 2,
+            width: s.width,
+            [side]: -s.offset,
+            opacity: 0.7 - i * 0.2,
           }}
         />
       ))}

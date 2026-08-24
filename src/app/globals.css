@@ -188,6 +188,15 @@ body {
   );
 }
 
+/* 책이 놓인 그림자. 닿는 자리는 좁고 짙게, 퍼지는 자리는 넓고 옅게. */
+.book-shadow {
+  box-shadow:
+    0 1px 1px rgb(var(--shadow-warm) / 0.1),
+    0 3px 8px -2px rgb(var(--shadow-warm) / 0.13),
+    0 24px 48px -20px rgb(var(--shadow-warm) / 0.3),
+    0 48px 90px -40px rgb(var(--shadow-warm) / 0.28);
+}
+
 /* 종이 두께: 책배 쪽에 얇은 선을 겹쳐 실제 장 수처럼 보이게 한다 */
 .fore-edge {
   background-image: repeating-linear-gradient(
@@ -200,22 +209,20 @@ body {
 }
 
 /* ── 본문 조판 ───────────────────────────────────────────── */
+/* 크기와 행간은 판면이 변수로 넘긴다. 화면 폭에 따라 흔들리면
+   베이스라인 그리드가 무너져 펼침면 좌우의 줄이 어긋난다. */
 .prose-diary {
-  font-size: clamp(0.975rem, 0.9rem + 0.25vw, 1.075rem);
-  line-height: 2.05;
-  letter-spacing: -0.005em;
+  font-size: var(--fs, 17px);
+  line-height: var(--lh, 32px);
+  letter-spacing: -0.004em;
   word-break: keep-all;
   overflow-wrap: break-word;
   hanging-punctuation: allow-end;
 }
 
-.drop-word::first-letter {
-  font-family: var(--font-display);
-  font-size: 2.15em;
-  line-height: 0.92;
-  float: left;
-  padding: 0.08em 0.14em 0 0;
-  color: var(--accent);
+.prose-diary blockquote,
+.prose-diary p {
+  line-height: inherit;
 }
 
 /* 강조. 본문의 결을 깨지 않을 만큼만 굵게 한다. */

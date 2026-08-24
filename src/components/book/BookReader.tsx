@@ -4,13 +4,7 @@ import Link from "next/link";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useMediaQuery } from "@/hooks/useMediaQuery";
 import { useViewport } from "@/hooks/useViewport";
-import {
-  GAP_DESKTOP,
-  GAP_MOBILE,
-  HEAD_GAP,
-  singleSize,
-  spreadSize,
-} from "@/lib/layout";
+import { metricsFor, singleSize, spreadSize } from "@/lib/layout";
 import { firstLeafOfEntry, padToSpreads, paginate } from "@/lib/paginate";
 import type { Book } from "@/lib/types";
 import { Measurer, type Measured } from "./Measurer";
@@ -33,7 +27,7 @@ export function BookReader({ book }: { book: Book }) {
     [isWide, vw, vh]
   );
   const pageW = isWide ? Math.floor(size.width / 2) : size.width;
-  const gap = isWide ? GAP_DESKTOP : GAP_MOBILE;
+  const type = useMemo(() => metricsFor(isWide), [isWide]);
 
   const [measured, setMeasured] = useState<Measured | null>(null);
   const onMeasured = useCallback((result: Measured) => setMeasured(result), []);
@@ -199,6 +193,7 @@ export function BookReader({ book }: { book: Book }) {
             onFlipEnd={onFlipEnd}
             width={size.width}
             height={size.height}
+            type={type}
           />
         ) : (
           <Slider
@@ -209,6 +204,7 @@ export function BookReader({ book }: { book: Book }) {
             onNav={go}
             width={size.width}
             height={size.height}
+            type={type}
           />
         )}
       </div>
@@ -267,8 +263,7 @@ export function BookReader({ book }: { book: Book }) {
           pageW={pageW}
           pageH={size.height}
           variant={isWide ? "right" : "single"}
-          gap={gap}
-          headGap={HEAD_GAP}
+          type={type}
           onMeasured={onMeasured}
         />
       )}

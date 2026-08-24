@@ -1,50 +1,45 @@
 import type { Book, Leaf } from "@/lib/types";
-import { HEAD_GAP } from "@/lib/layout";
+import type { Metrics } from "@/lib/layout";
 import { Page, type PageVariant } from "./Page";
 import { PageBody } from "./PageBody";
 
-/** 한 장의 앞면 또는 뒷면. Spread와 Slider가 함께 쓴다. */
+/**
+ * 한 장의 앞면 또는 뒷면. Spread와 Slider가 함께 쓴다.
+ *
+ * 기둥제목은 책의 관례를 따른다. 왼쪽 면에는 책 이름, 오른쪽 면에는
+ * 그 장의 날짜. 쪽수 표시를 함께 늘어놓으면 판면이 어수선해진다.
+ */
 export function LeafFace({
   leaf,
   book,
   variant,
   folio,
-  gap,
+  type,
 }: {
   leaf: Leaf | undefined;
   book: Book;
   variant: PageVariant;
   folio: number;
-  gap: number;
+  type: Metrics;
 }) {
   if (!leaf || leaf.pageInEntry === -1) {
     return <Page variant={variant} />;
   }
 
   const entry = book.entries[leaf.entryIndex];
-  const continued = leaf.pageInEntry > 0;
+  const head = variant === "left" ? book.word : entry.label;
 
   return (
     <Page
       variant={variant}
-      runningHead={
-        continued ? (
-          <span className="flex items-center gap-2">
-            <span>{book.word}</span>
-            <span className="text-ink-3/70">
-              {leaf.pageInEntry + 1}/{leaf.entryPageCount}
-            </span>
-          </span>
-        ) : null
-      }
+      runningHead={leaf.pageInEntry === 0 ? undefined : head}
       folio={folio}
     >
       <PageBody
         blocks={leaf.blocks}
         entry={entry}
         showHead={leaf.pageInEntry === 0}
-        gap={gap}
-        headGap={HEAD_GAP}
+        metrics={type}
       />
     </Page>
   );

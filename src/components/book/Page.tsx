@@ -1,25 +1,13 @@
 import type { ReactNode, RefObject } from "react";
+import { pageMargins } from "@/lib/layout";
 
 export type PageVariant = "left" | "right" | "single";
 
-/** 책등 쪽 여백을 더 넉넉히 둬서 펼침면이 안으로 말려 들어가는 느낌을 만든다. */
-export function pagePadding(variant: PageVariant) {
-  if (variant === "single") {
-    return { paddingLeft: 26, paddingRight: 26, paddingTop: 30, paddingBottom: 22 };
-  }
-  const gutter = 52;
-  const outer = 40;
-  return {
-    paddingLeft: variant === "left" ? outer : gutter,
-    paddingRight: variant === "left" ? gutter : outer,
-    paddingTop: 38,
-    paddingBottom: 26,
-  };
-}
-
 /**
- * 한 장의 껍데기. 본문 영역을 flex로 남겨두므로
- * contentRef의 실측 높이가 그대로 "한 장에 담을 수 있는 높이"가 된다.
+ * 한 장의 껍데기.
+ *
+ * 쪽번호와 기둥제목(running head)은 판면 밖 여백에 절대배치한다.
+ * 본문 흐름에 끼워 넣으면 판면 높이가 그만큼 줄어 그리드가 깨진다.
  */
 export function Page({
   variant,
@@ -34,14 +22,18 @@ export function Page({
   folio?: ReactNode;
   children?: ReactNode;
 }) {
-  const outerAlign = variant === "left" ? "justify-start" : "justify-end";
+  const m = pageMargins(variant);
+  const left = variant === "left" ? m.outer : m.inner;
+  const right = variant === "left" ? m.inner : m.outer;
+  // 쪽번호와 기둥제목은 책의 바깥쪽 모서리에 둔다
+  const outerSide = variant === "left" ? "left" : "right";
 
   return (
     <div className="grain relative h-full w-full overflow-hidden bg-paper">
       {variant !== "single" && (
         <span
           aria-hidden="true"
-          className={`pointer-events-none absolute inset-y-0 w-[11%] ${
+          className={`pointer-events-none absolute inset-y-0 w-[13%] ${
             variant === "left" ? "gutter-r right-0" : "gutter-l left-0"
           }`}
         />
@@ -51,23 +43,38 @@ export function Page({
         className="page-vignette pointer-events-none absolute inset-0"
       />
 
-      <div className="relative flex h-full flex-col" style={pagePadding(variant)}>
+      {runningHead && (
         <div
-          className={`flex h-3.5 shrink-0 items-center ${outerAlign} text-[0.5625rem] tracking-[0.22em] text-ink-3`}
+          className="absolute text-[0.5625rem] tracking-[0.26em] text-ink-3"
+          style={{
+            top: m.top - 26,
+            [outerSide]: variant === "single" ? left : m.outer,
+          }}
         >
           {runningHead}
         </div>
+      )}
 
-        <div ref={contentRef} className="relative min-h-0 flex-1 overflow-hidden">
-          {children}
-        </div>
+      {/* 판면 */}
+      <div
+        ref={contentRef}
+        className="absolute overflow-hidden"
+        style={{ top: m.top, bottom: m.bottom, left, right }}
+      >
+        {children}
+      </div>
 
+      {folio !== undefined && (
         <div
-          className={`flex h-5 shrink-0 items-end ${outerAlign} text-[0.625rem] tabular-nums tracking-widest text-ink-3`}
+          className="absolute text-[0.625rem] tabular-nums tracking-[0.14em] text-ink-3"
+          style={{
+            bottom: m.bottom - 30,
+            [outerSide]: variant === "single" ? left : m.outer,
+          }}
         >
           {folio}
         </div>
-      </div>
+      )}
     </div>
   );
 }

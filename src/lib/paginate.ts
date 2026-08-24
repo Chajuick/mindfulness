@@ -40,7 +40,9 @@ export function paginate(
 
       while (i < entry.blocks.length) {
         const bh = h[i] ?? 0;
-        const add = taken.length === 0 ? bh : m.gap + bh;
+        // 한 문단에서 갈라져 나온 조각 앞에는 여백을 두지 않는다
+        const lead = entry.blocks[i].cont ? 0 : m.gap;
+        const add = taken.length === 0 ? bh : lead + bh;
         // 한 블록이 장보다 커도 최소 하나는 실어 보낸다 (무한 루프 방지)
         if (used + add > budget && taken.length > 0) break;
         used += add;
