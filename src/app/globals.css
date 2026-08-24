@@ -156,22 +156,27 @@ body {
   -webkit-backface-visibility: hidden;
 }
 
-/* 책등 그늘: 펼침면 가운데가 안으로 말려 들어가는 느낌 */
-.gutter-l {
+/* 책등 그늘: 펼침면 가운데가 안으로 말려 들어가는 느낌.
+   진한 끝이 반드시 책등에 닿아야 한다. 뒤집히면 종이 한가운데에
+   가짜 경계선이 생겨 지면이 끊겨 보인다. */
+
+/* 책등이 오른쪽에 있는 면(= 왼쪽 페이지)용 */
+.gutter-r {
   background: linear-gradient(
     to left,
-    rgb(var(--shadow-warm) / 0.24) 0%,
-    rgb(var(--shadow-warm) / 0.08) 22%,
-    transparent 72%
+    rgb(var(--shadow-warm) / 0.26) 0%,
+    rgb(var(--shadow-warm) / 0.09) 24%,
+    transparent 78%
   );
 }
 
-.gutter-r {
+/* 책등이 왼쪽에 있는 면(= 오른쪽 페이지)용 */
+.gutter-l {
   background: linear-gradient(
     to right,
-    rgb(var(--shadow-warm) / 0.24) 0%,
-    rgb(var(--shadow-warm) / 0.08) 22%,
-    transparent 72%
+    rgb(var(--shadow-warm) / 0.26) 0%,
+    rgb(var(--shadow-warm) / 0.09) 24%,
+    transparent 78%
   );
 }
 
@@ -218,6 +223,12 @@ body {
   writing-mode: vertical-rl;
   text-orientation: upright;
   letter-spacing: 0.22em;
+}
+
+/* 선택된 칸. 채워 넣으면 밤 테마에서 잉크가 밝은 크림색이라 너무 튄다. */
+.seg-on {
+  background: color-mix(in oklab, var(--ink) 11%, transparent);
+  color: var(--ink);
 }
 
 /* 얇은 스크롤바 */

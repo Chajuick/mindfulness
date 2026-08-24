@@ -55,9 +55,7 @@ export function Chronicle({ entries }: { entries: EntryMeta[] }) {
             onClick={() => pickYear(y)}
             aria-pressed={year === y}
             className={`rounded-full px-3.5 py-1.5 font-display text-[0.875rem] tracking-wide transition-colors ${
-              year === y
-                ? "bg-ink text-paper"
-                : "text-ink-2 hover:bg-paper hover:text-ink"
+              year === y ? "seg-on" : "text-ink-3 hover:bg-paper hover:text-ink"
             }`}
           >
             {y}
@@ -69,9 +67,7 @@ export function Chronicle({ entries }: { entries: EntryMeta[] }) {
             onClick={() => pickYear(ALL)}
             aria-pressed={year === ALL}
             className={`rounded-full px-3.5 py-1.5 text-[0.8125rem] tracking-wide transition-colors ${
-              year === ALL
-                ? "bg-ink text-paper"
-                : "text-ink-2 hover:bg-paper hover:text-ink"
+              year === ALL ? "seg-on" : "text-ink-3 hover:bg-paper hover:text-ink"
             }`}
           >
             전체

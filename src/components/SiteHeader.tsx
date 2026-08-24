@@ -17,7 +17,7 @@ export function SiteHeader() {
             마음공부
           </span>
           <span className="hidden text-[0.6875rem] tracking-[0.2em] text-ink-3 sm:inline">
-            心工夫
+            차주익
           </span>
         </Link>
 
