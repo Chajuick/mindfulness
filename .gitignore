@@ -1,0 +1,16 @@
+node_modules/
+.next/
+out/
+dist/
+*.tsbuildinfo
+next-env.d.ts
+.DS_Store
+.env*.local
+
+# 개발 중 생기는 것
+.playwright-mcp/
+build.log
+
+# bkit 로컬 상태 (절대경로가 들어 있어 공유하지 않는다)
+docs/.bkit-memory.json
+docs/.pdca-status.json
