@@ -22,9 +22,11 @@ export default function HomePage() {
         >
           서재
         </h1>
+        {/* 두 줄이 한 짝이라 좁은 화면에서도 붙여 두지 않는다 */}
         <p className="mx-auto mt-4 max-w-md text-[0.875rem] leading-[1.9] text-ink-2">
-          단어 하나에서 출발한 생각이 어디까지 가는지 담담하게 적습니다.
-          <br className="hidden sm:inline" /> 그 길이 쌓여 한 권이 됩니다.
+          단어에 스치는 날들을 쌓아갑니다.
+          <br />
+          쌓인 장들이 한 사람이 될 때까지.
         </p>
         <Flourish className="mt-7" />
       </header>
