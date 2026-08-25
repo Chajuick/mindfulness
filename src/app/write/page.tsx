@@ -6,6 +6,9 @@ import { Composer } from "@/components/write/Composer";
 export const metadata: Metadata = {
   title: "쓰기",
   description: "초고를 적고 마크다운으로 내보냅니다.",
+  alternates: { canonical: "/write" },
+  // 초고를 적는 자리다. 검색 결과에 끌어낼 화면이 아니다.
+  robots: { index: false, follow: true },
 };
 
 export default function WritePage() {

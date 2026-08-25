@@ -1,4 +1,6 @@
 import { getBooks } from "@/lib/content";
+import { SITE, abs } from "@/lib/site";
+import { JsonLd } from "@/components/JsonLd";
 import { stripBlocks } from "@/lib/view";
 import { Flourish } from "@/components/ui/Flourish";
 import { LibraryView } from "@/components/library/LibraryView";
@@ -13,6 +15,29 @@ export default function HomePage() {
 
   return (
     <div className="mx-auto max-w-6xl px-5 pb-24 pt-14 sm:px-8 sm:pt-20">
+      <JsonLd
+        data={{
+          "@context": "https://schema.org",
+          "@type": "Blog",
+          "@id": abs("/#blog"),
+          name: SITE.name,
+          description: SITE.description,
+          url: abs("/"),
+          inLanguage: "ko-KR",
+          author: { "@type": "Person", name: SITE.author },
+          publisher: { "@type": "Person", name: SITE.author },
+          blogPost: bookMetas.map((book) => ({
+            "@type": "BlogPosting",
+            headline: book.word,
+            description: book.subtitle,
+            url: abs(`/book/${book.slug}`),
+            datePublished: book.firstDate,
+            dateModified: book.lastDate,
+            inLanguage: "ko-KR",
+            author: { "@type": "Person", name: SITE.author },
+          })),
+        }}
+      />
       <header className="mx-auto max-w-xl text-center">
         <p className="text-[0.6875rem] tracking-[0.32em] text-ink-3">여정의 발자취</p>
         <h1

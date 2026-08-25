@@ -176,6 +176,32 @@ src/
 서재 맨 아래에 같은 사람이 쓰는 다른 곳으로 가는 문을 둡니다.
 목록은 `src/components/library/OtherShelf.tsx` 의 `SHELVES` 한 곳에 있습니다.
 
+## 문 밖에서 보이는 모습
+
+표지·아이콘·미리보기는 모두 한 그림에서 나옵니다. 책 한 권과 그 위의 하트.
+
+| 무엇          | 어디에                                                            |
+| ------------- | ----------------------------------------------------------------- |
+| 아이콘        | `public/icon.svg` · `icon-*.png` · `src/app/favicon.ico`          |
+| 설치          | `src/app/manifest.ts` · `public/sw.js`                            |
+| 링크 미리보기 | `src/app/opengraph-image.tsx` · `book/[slug]/opengraph-image.tsx` |
+| 검색          | `src/app/sitemap.ts` · `robots.ts` · 각 화면의 JSON-LD            |
+
+**아이콘을 고치려면** `scripts/gen-icons.mjs` 의 SVG를 고치고 `node scripts/gen-icons.mjs`.
+결과물은 커밋해 두므로 빌드에는 이 스크립트가 필요 없습니다.
+
+**설치.** 홈 화면에 얹으면 브라우저 껍데기 없이 열립니다. 서비스 워커는
+글은 늘 새것을 먼저 가져오고(network-first), 망이 끊겼을 때만 받아둔 것을
+꺼냅니다. 반대로 하면 고쳐 올린 글이 며칠씩 옛 모습으로 남습니다.
+펼친 횟수(`/api`)는 캐시하지 않습니다 — 옛 숫자를 보여주느니 없는 게 낫습니다.
+
+**링크 미리보기.** 권마다 실제 표지 색 그대로 한 장씩 그립니다. 한글 글자는
+구글 폰트에서 **쓰인 글자만 잘라** 받습니다(수 MB 대신 수십 KB). 빌드할 때
+망에 닿지 못하면 글자 없는 판으로 물러설 뿐, 빌드가 무너지지는 않습니다.
+
+**주소.** canonical·OG·sitemap 은 절대 주소여야 합니다. Vercel 위에서는
+도메인이 자동으로 들어오고, 그 밖에는 `NEXT_PUBLIC_SITE_URL` 하나만 적으면 됩니다.
+
 ## 나중에 붙일 것
 
 - **클라우드 동기화** — `src/lib/content.ts`만 갈아끼우면 됩니다. 나머지는 그대로 씁니다.
