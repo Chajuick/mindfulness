@@ -3,6 +3,7 @@
 import { useEffect, useMemo, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import { Segmented } from "@/components/ui/Segmented";
+import { useViews } from "@/hooks/useViews";
 import type { BookMeta, EntryMeta } from "@/lib/types";
 import { BookCard } from "./BookCard";
 import { Chronicle } from "./Chronicle";
@@ -30,6 +31,7 @@ export function LibraryView({
   books: BookMeta[];
   entries: EntryMeta[];
 }) {
+  const views = useViews();
   const [mode, setMode] = useState<Mode>("word");
   const [sort, setSort] = useState<Sort>("recent");
 
@@ -102,7 +104,7 @@ export function LibraryView({
             <ul className="grid grid-cols-2 gap-5 sm:grid-cols-3 sm:gap-7 lg:grid-cols-4">
               {sorted.map((book, i) => (
                 <li key={book.slug}>
-                  <BookCard book={book} index={i} />
+                  <BookCard book={book} index={i} views={views?.[book.slug]} />
                 </li>
               ))}
             </ul>

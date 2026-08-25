@@ -1,0 +1,7 @@
+# 일기 원문은 도구가 건드리지 않는다.
+# 줄 끝 공백 하나도 지은이가 둔 자리다.
+content/
+
+node_modules/
+.next/
+pnpm-lock.yaml

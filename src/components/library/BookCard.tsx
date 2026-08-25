@@ -18,7 +18,15 @@ function boards(hue: number) {
   };
 }
 
-export function BookCard({ book, index }: { book: BookMeta; index: number }) {
+export function BookCard({
+  book,
+  index,
+  views,
+}: {
+  book: BookMeta;
+  index: number;
+  views?: number;
+}) {
   const count = book.entries.length;
   const span =
     count > 1
@@ -89,6 +97,13 @@ export function BookCard({ book, index }: { book: BookMeta; index: number }) {
                 <span>{count}장</span>
                 <span className="h-2.5 w-px bg-current opacity-50" />
                 <span className="truncate">{span}</span>
+                {/* 아직 아무도 펼치지 않은 책에 0을 박아둘 필요는 없다 */}
+                {views !== undefined && views > 0 && (
+                  <>
+                    <span className="h-2.5 w-px bg-current opacity-50" />
+                    <span className="whitespace-nowrap">{views}번</span>
+                  </>
+                )}
               </div>
             </div>
           </div>

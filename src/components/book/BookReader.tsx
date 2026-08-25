@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useMediaQuery } from "@/hooks/useMediaQuery";
+import { useOpenCount } from "@/hooks/useViews";
 import { useViewport } from "@/hooks/useViewport";
 import { metricsFor, singleSize, spreadSize } from "@/lib/layout";
 import { firstLeafOfEntry, padToSpreads, paginate } from "@/lib/paginate";
@@ -19,6 +20,7 @@ export function BookReader({ book }: { book: Book }) {
     return new URLSearchParams(window.location.search).get("d") ?? undefined;
   });
 
+  const opened = useOpenCount(book.slug);
   const isWide = useMediaQuery("(min-width: 900px)");
   const { vw, vh } = useViewport();
 
@@ -164,13 +166,20 @@ export function BookReader({ book }: { book: Book }) {
           )}
         </div>
 
-        <button
-          type="button"
-          onClick={() => setTocOpen(true)}
-          className="text-[0.75rem] text-ink-3 transition-colors hover:text-ink"
-        >
-          목차
-        </button>
+        <div className="flex items-center gap-3.5">
+          {opened !== null && opened > 0 && (
+            <span className="hidden text-[0.6875rem] tabular-nums text-ink-3 sm:inline">
+              {opened}번 펼침
+            </span>
+          )}
+          <button
+            type="button"
+            onClick={() => setTocOpen(true)}
+            className="text-[0.75rem] text-ink-3 transition-colors hover:text-ink"
+          >
+            목차
+          </button>
+        </div>
       </div>
 
       {/* 책 */}
@@ -252,6 +261,7 @@ export function BookReader({ book }: { book: Book }) {
       <TableOfContents
         book={book}
         open={tocOpen}
+        opened={opened}
         currentEntry={currentEntry}
         onPick={seek}
         onClose={() => setTocOpen(false)}

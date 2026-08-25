@@ -7,12 +7,14 @@ import type { Book } from "@/lib/types";
 export function TableOfContents({
   book,
   open,
+  opened,
   currentEntry,
   onPick,
   onClose,
 }: {
   book: Book;
   open: boolean;
+  opened: number | null;
   currentEntry: number;
   onPick: (entryIndex: number) => void;
   onClose: () => void;
@@ -45,6 +47,7 @@ export function TableOfContents({
                   {book.word}
                   <span className="ml-2 text-[0.75rem] text-ink-3">
                     {book.entries.length}장
+                    {opened !== null && opened > 0 && ` · ${opened}번 펼침`}
                   </span>
                 </p>
               </div>
