@@ -8,10 +8,10 @@ export const metadata: Metadata = {
     template: "%s · 마음공부",
   },
   description:
-    "단어 하나를 두고 하루하루를 담담하게 적어나가며 삶을 성찰하는 일기. 한 권이 한 단어입니다.",
+    "단어 하나에서 출발한 생각이 어디까지 가는지 적어나가는 일기. 한 권이 한 단어에서 시작합니다.",
   openGraph: {
     title: "마음공부",
-    description: "단어 하나를 두고 하루하루를 적어나가는 일기.",
+    description: "단어 하나에서 출발한 생각이 어디까지 가는지 적어나가는 일기.",
     type: "website",
   },
 };

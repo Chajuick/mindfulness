@@ -35,6 +35,8 @@ function readBook(dirName: string): Book | null {
   const word = typeof meta.word === "string" ? meta.word : dirName;
   const slug = typeof meta.slug === "string" ? meta.slug : dirName;
   const hue = typeof meta.hue === "number" ? meta.hue : hashHue(word);
+  // 20%를 넘기면 곧바로 UI 카드처럼 보인다. 낮추는 쪽만 열어둔다.
+  const sat = typeof meta.sat === "number" ? Math.min(Math.max(meta.sat, 0), 20) : 17;
   const fallbackYear =
     typeof meta.year === "number" ? meta.year : new Date().getFullYear();
 
@@ -69,6 +71,7 @@ function readBook(dirName: string): Book | null {
     slug,
     subtitle: typeof meta.subtitle === "string" ? meta.subtitle : undefined,
     hue,
+    sat,
     sample: meta.sample === true,
     entries,
     firstDate: entries[0].date,

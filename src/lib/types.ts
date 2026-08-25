@@ -23,6 +23,8 @@ export type Book = {
   subtitle?: string;
   /** 표지 색상 (HSL hue, 0-360) */
   hue: number;
+  /** 표지 채도(%). 올릴수록 책보다 UI 카드처럼 보인다. */
+  sat: number;
   /** 지워도 되는 예시 권 */
   sample: boolean;
   entries: Entry[];

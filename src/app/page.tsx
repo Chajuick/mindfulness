@@ -13,7 +13,9 @@ export default function HomePage() {
   return (
     <div className="mx-auto max-w-6xl px-5 pb-24 pt-14 sm:px-8 sm:pt-20">
       <header className="mx-auto max-w-xl text-center">
-        <p className="text-[0.6875rem] tracking-[0.32em] text-ink-3">한 권이 한 단어</p>
+        <p className="text-[0.6875rem] tracking-[0.32em] text-ink-3">
+          한 단어에서 시작하는 한 권
+        </p>
         <h1
           className="mt-4 font-display text-[2rem] leading-[1.35] tracking-tight text-ink sm:text-[2.5rem]"
           style={{ fontWeight: 700 }}
@@ -21,8 +23,8 @@ export default function HomePage() {
           서재
         </h1>
         <p className="mx-auto mt-4 max-w-md text-[0.875rem] leading-[1.9] text-ink-2">
-          단어 하나를 정해두고, 그 단어를 스치는 날들을 담담하게 적습니다.
-          <br className="hidden sm:inline" /> 쌓인 장들이 한 권이 됩니다.
+          단어 하나에서 출발한 생각이 어디까지 가는지 담담하게 적습니다.
+          <br className="hidden sm:inline" /> 그 길이 쌓여 한 권이 됩니다.
         </p>
         <Flourish className="mt-7" />
       </header>

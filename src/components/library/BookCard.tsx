@@ -9,12 +9,12 @@ import type { BookMeta } from "@/lib/types";
  * 천을 씌운 양장본은 낮이든 밤이든 색이 변하지 않고,
  * 옅게 물들인 판형은 책보다 UI 카드처럼 읽힌다.
  */
-function boards(hue: number) {
+function boards(hue: number, sat: number) {
   return {
-    face: `linear-gradient(158deg, hsl(${hue} 17% 30%) 0%, hsl(${hue} 16% 24%) 58%, hsl(${hue} 17% 21%) 100%)`,
-    spine: `hsl(${hue} 21% 15%)`,
-    foil: `hsl(${hue} 12% 87%)`,
-    rule: `hsl(${hue} 12% 87% / 0.26)`,
+    face: `linear-gradient(158deg, hsl(${hue} ${sat}% 30%) 0%, hsl(${hue} ${Math.max(sat - 1, 0)}% 24%) 58%, hsl(${hue} ${sat}% 21%) 100%)`,
+    spine: `hsl(${hue} ${sat + 4}% 15%)`,
+    foil: `hsl(${hue} ${Math.min(sat, 12)}% 87%)`,
+    rule: `hsl(${hue} ${Math.min(sat, 12)}% 87% / 0.26)`,
   };
 }
 
@@ -32,7 +32,7 @@ export function BookCard({
     count > 1
       ? `${book.entries[0].label} – ${book.entries[count - 1].label}`
       : book.entries[0].label;
-  const c = boards(book.hue);
+  const c = boards(book.hue, book.sat);
 
   return (
     <motion.div
