@@ -13,9 +13,7 @@ export default function HomePage() {
   return (
     <div className="mx-auto max-w-6xl px-5 pb-24 pt-14 sm:px-8 sm:pt-20">
       <header className="mx-auto max-w-xl text-center">
-        <p className="text-[0.6875rem] tracking-[0.32em] text-ink-3">
-          한 단어에서 시작하는 한 권
-        </p>
+        <p className="text-[0.6875rem] tracking-[0.32em] text-ink-3">여정의 발자취</p>
         <h1
           className="mt-4 font-display text-[2rem] leading-[1.35] tracking-tight text-ink sm:text-[2.5rem]"
           style={{ fontWeight: 700 }}
