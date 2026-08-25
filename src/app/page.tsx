@@ -2,6 +2,7 @@ import { getBooks } from "@/lib/content";
 import { stripBlocks } from "@/lib/view";
 import { Flourish } from "@/components/ui/Flourish";
 import { LibraryView } from "@/components/library/LibraryView";
+import { OtherShelf } from "@/components/library/OtherShelf";
 
 export default function HomePage() {
   const books = getBooks();
@@ -36,6 +37,8 @@ export default function HomePage() {
           <LibraryView books={bookMetas} entries={entries} />
         )}
       </div>
+
+      <OtherShelf />
     </div>
   );
 }

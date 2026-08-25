@@ -3,20 +3,7 @@
 import Link from "next/link";
 import { motion } from "framer-motion";
 import type { BookMeta } from "@/lib/types";
-
-/**
- * 표지는 두 테마에서 같은 색을 쓴다.
- * 천을 씌운 양장본은 낮이든 밤이든 색이 변하지 않고,
- * 옅게 물들인 판형은 책보다 UI 카드처럼 읽힌다.
- */
-function boards(hue: number, sat: number) {
-  return {
-    face: `linear-gradient(158deg, hsl(${hue} ${sat}% 30%) 0%, hsl(${hue} ${Math.max(sat - 1, 0)}% 24%) 58%, hsl(${hue} ${sat}% 21%) 100%)`,
-    spine: `hsl(${hue} ${sat + 4}% 15%)`,
-    foil: `hsl(${hue} ${Math.min(sat, 12)}% 87%)`,
-    rule: `hsl(${hue} ${Math.min(sat, 12)}% 87% / 0.26)`,
-  };
-}
+import { boards } from "@/lib/covers";
 
 export function BookCard({
   book,
